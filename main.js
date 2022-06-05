@@ -8,7 +8,7 @@ cc.game.onStart = function () {
     cc.LoaderScene.preload(Object.values(resources), function () {
         cc.spriteFrameCache.addSpriteFrames(resources.game_plist);
 
-        // cc.director.runScene(new Scene());
+        cc.director.runScene(new Scene());
     }, this);
 };
 
