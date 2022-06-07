@@ -1,12 +1,53 @@
 var resources = {
     game_plist: "respacked/game.plist",
 
+    background: "res/backgrounds/background.jpg",
     level_bg1: "res/backgrounds/level_bg.jpg",
     level_bg2: "res/backgrounds/level_bg2.jpg",
     level_bg3: "res/backgrounds/level_bg3.jpg",
 
+    pattern_bg: "res/backgrounds/pattern_bg_game.png",
+    pattern_bg_hard: "res/backgrounds/pattern_bg_game_hard.png",
+
     words_full: "res/dictionary/ru_full.txt",
     words_popular: "res/dictionary/ru_popular.txt",
 
-    
+    letters: {
+        'а': 'res/letters/rus/a.png',
+        'б': 'res/letters/rus/b.png',
+        'в': 'res/letters/rus/v.png',
+        'г': 'res/letters/rus/g.png',
+        'д': 'res/letters/rus/d.png',
+        'е': 'res/letters/rus/e.png',
+        'ё': 'res/letters/rus/yo.png',
+        'ж': 'res/letters/rus/zh.png',
+        'з': 'res/letters/rus/z.png',
+        'и': 'res/letters/rus/i.png',
+        'й': 'res/letters/rus/j.png',
+        'к': 'res/letters/rus/k.png',
+        'л': 'res/letters/rus/l.png',
+        'м': 'res/letters/rus/m.png',
+        'н': 'res/letters/rus/n.png',
+        'о': 'res/letters/rus/o.png',
+        'п': 'res/letters/rus/p.png',
+        'р': 'res/letters/rus/r.png',
+        'с': 'res/letters/rus/s.png',
+        'т': 'res/letters/rus/t.png',
+        'у': 'res/letters/rus/u.png',
+        'ф': 'res/letters/rus/f.png',
+        'х': 'res/letters/rus/x.png',
+        'ц': 'res/letters/rus/cz.png',
+        'ч': 'res/letters/rus/ch.png',
+        'ш': 'res/letters/rus/sh.png',
+        'щ': 'res/letters/rus/shh.png',
+        'ъ': 'res/letters/rus/tz.png',
+        'ы': 'res/letters/rus/y.png',
+        'ь': 'res/letters/rus/mz.png',
+        'э': 'res/letters/rus/eh.png',
+        'ю': 'res/letters/rus/yu.png',
+        'я': 'res/letters/rus/ya.png'
+    },
+
+    cell: 'res/game/cell.png',
+    board_bg: 'res/game/board_bg.png',
 }

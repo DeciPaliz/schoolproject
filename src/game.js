@@ -27,7 +27,6 @@ Game.prototype.generate = function (words_amount, letters_amount, max_len) {
         for (;;) {
             letters = [];
             words = [];
-            let double_letter = false;
             for (let i = 0; i < letters_amount; i++) {
                 //let random_letter = Game.LETTERS[Math.floor(Math.random() * Game.LETTERS.length)];
                 let random_letter = this.getRandomLetter();

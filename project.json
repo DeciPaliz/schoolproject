@@ -11,6 +11,7 @@
     "jsList": [
         "src/resources.js",
         "src/game.js",
-        "src/scene.js"
+        "src/scene.js",
+        "src/wordframe.js"
     ]
 }
