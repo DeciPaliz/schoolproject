@@ -2,8 +2,14 @@ var LetterWheel = cc.Node.extend({
     ctor: function (letters, radius) {
         this._super();
 
+        this.onSelectLetter = function (letter) {};
+        this.onDeselectLetter = function (index) {};
+
         this.letters = letters;
         this.radius = radius;
+
+        this.selectedLetters = [];
+
         this.letterbuttons = new Array(this.letters.length).fill();
         for (let i = 0; i < this.letters.length; i++) {
             this.letterbuttons[i] = new LetterButton(this.letters[i]);
@@ -32,12 +38,20 @@ var LetterWheel = cc.Node.extend({
         let angle = 2*Math.PI/this.letters.length;
         for (let i = 0; i < this.letters.length; i++) {
             let lb = this.letterbuttons[i];
-            lb.setPosition(this.x + Math.floor(this.radius*(Math.sin(i*angle))), this.y + Math.floor(this.radius*(Math.cos(i*angle))));
+            lb.setPosition(Math.floor(this.radius*(Math.sin(i*angle))), Math.floor(this.radius*(Math.cos(i*angle))));
         }
     },
 
     onLetterButtonClick: function (index) {
         this.letterbuttons[index].selectionBox.setVisible(!this.letterbuttons[index].selectionBox.isVisible());
+        if (this.letterbuttons[index].selectionBox.isVisible()) {
+            this.onSelectLetter(this.letters[index]);
+            this.selectedLetters.push(index);
+        }
+        else {
+            this.onDeselectLetter(this.selectedLetters.indexOf(index));
+            this.selectedLetters = this.selectedLetters.filter(function (val) { return val != index; });
+        }
         this.selectedCount += this.letterbuttons[index].selectionBox.isVisible() ? 1 : -1;
         if (this.selectedCount > 0) 
             this.shuffleButton.setVisible(false);

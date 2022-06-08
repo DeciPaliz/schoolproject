@@ -10,6 +10,7 @@ var Scene = cc.Scene.extend({
         setTimeout(function () {
             this.addWordFrames();
             this.addLetterWheel();
+            this.addWordPreview();
         }.bind(this), 1000);
     },
 
@@ -66,6 +67,24 @@ var Scene = cc.Scene.extend({
         this.letter_wheel = new LetterWheel(this.game.letters, this.height/4 - lettersize.width);
         this.letter_wheel.setPosition(this.width/2, this.height/4);
         this.addChild(this.letter_wheel);
+
+        this.letter_wheel.onSelectLetter = this.onLetterWheelSelectLetter.bind(this);
+        this.letter_wheel.onDeselectLetter = this.onLetterWheelDeselectLetter.bind(this);
+    },
+
+    addWordPreview: function () {
+        let lettersize = cc.spriteFrameCache.getSpriteFrame('letter_bg.png').getOriginalSize();
+        this.word_preview = new WordPreview();
+        this.word_preview.setPosition(this.width/2, this.board_bg.y - this.board_bg.height + lettersize.height);
+        this.addChild(this.word_preview);
+    },
+
+    onLetterWheelSelectLetter: function (letter) {
+        this.word_preview.addLetter(letter);
+    },
+
+    onLetterWheelDeselectLetter: function (index) {
+        this.word_preview.removeLetter(index);
     },
 
 });
