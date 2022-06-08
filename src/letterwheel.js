@@ -23,6 +23,9 @@ var LetterWheel = cc.Node.extend({
         this.submitButtonIcon.setVisible(false);
         this.addChild(this.submitButton);
         this.addChild(this.submitButtonIcon);
+
+        this.shuffleButton = new ccui.Button('#shuffle.png', '#shuffle_on.png', null, ccui.Widget.PLIST_TEXTURE);
+        this.addChild(this.shuffleButton);
     },
 
     setCirclePosition: function () {
@@ -36,6 +39,10 @@ var LetterWheel = cc.Node.extend({
     onLetterButtonClick: function (index) {
         this.letterbuttons[index].selectionBox.setVisible(!this.letterbuttons[index].selectionBox.isVisible());
         this.selectedCount += this.letterbuttons[index].selectionBox.isVisible() ? 1 : -1;
+        if (this.selectedCount > 0) 
+            this.shuffleButton.setVisible(false);
+        else
+            this.shuffleButton.setVisible(true);
         if (this.selectedCount >= 3) {
             //TODO: animation
             this.submitButton.setVisible(true);

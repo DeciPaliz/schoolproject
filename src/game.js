@@ -33,18 +33,34 @@ Game.prototype.generate = function (words_amount, letters_amount, max_len) {
                 letters.push(random_letter);
             }
 
-            for (let i = Game.WORDS_POPULAR_BOUNDS[max_len][1]; i >= Game.WORDS_POPULAR_BOUNDS[3][0]; i--) {
+            for (let i = Game.WORDS_POPULAR_BOUNDS[letters_amount][1]; i >= Game.WORDS_POPULAR_BOUNDS[3][0]; i--) {
                 let word = word_list[i];
                 if (this.doesWordConsistOf(word, letters))
                     words.push(word);
             }
 
-            if (words.length >= words_amount) break;
+            if (words.length >= words_amount) {
+                this.words = new Array(words_amount).fill();
+                let i = 0;
+                for (let word of words) {
+                    if (i >= words_amount) break;
+                    if (word.length <= max_len) {
+                        this.words[i] = word;
+                        i++;
+                    }
+                }
+                if (i >= words_amount) {
+                    this.possible_words = words.filter(function (val) { return this.words.indexOf(val) == -1; }.bind(this));
+                    break;
+                }
+            }
         }
-        this.words = Array(words_amount).fill().map(function (_, i) { return words[i]; });
         this.letters = Array(letters_amount).fill().map(function (_, i) { return letters[i]; });
         console.log(this.words);
+        console.log(this.possible_words);
         console.log(this.letters);
+
+        this.possible_words = [];
     }.bind(this));
 };
 
