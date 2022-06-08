@@ -7,7 +7,10 @@ var Scene = cc.Scene.extend({
         this.addBackground();
         this.addBoardBackground();
 
-        setTimeout(this.addWordFrames.bind(this), 1000);
+        setTimeout(function () {
+            this.addWordFrames();
+            this.addLetterWheel();
+        }.bind(this), 1000);
     },
 
     addBackground: function() {
@@ -19,7 +22,7 @@ var Scene = cc.Scene.extend({
     },
 
     addBoardBackground: function () {
-        this.board_bg = new ccui.Scale9Sprite(resources.board_bg, cc.rect(9, 5, 2, 2));
+        this.board_bg = new ccui.Scale9Sprite(cc.spriteFrameCache.getSpriteFrame('board_bg.png'), cc.rect(9, 5, 2, 2));
         this.board_bg.setContentSize(this.width - Game.BOARD_BG_MARGIN_X*2, this.height/2);
         this.board_bg.setAnchorPoint(0, 1);
         this.board_bg.setPosition(Game.BOARD_BG_MARGIN_X, this.height - Game.BOARD_BG_MARGIN_X);
@@ -56,6 +59,13 @@ var Scene = cc.Scene.extend({
             this.addChild(wordframe);
             this.wordframes[i] = wordframe;
         } 
+    },
+
+    addLetterWheel: function () {
+        let lettersize = cc.spriteFrameCache.getSpriteFrame('letter_bg.png').getOriginalSize();
+        this.letter_wheel = new LetterWheel(this.game.letters, this.height/4 - lettersize.width);
+        this.letter_wheel.setPosition(this.width/2, this.height/4);
+        this.addChild(this.letter_wheel);
     },
 
 });

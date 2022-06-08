@@ -12,6 +12,8 @@
         "src/resources.js",
         "src/game.js",
         "src/scene.js",
-        "src/wordframe.js"
+        "src/wordframe.js",
+        "src/letterwheel.js",
+        "src/letterbutton.js"
     ]
 }

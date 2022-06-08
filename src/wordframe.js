@@ -21,7 +21,7 @@ var WordFrame = cc.Node.extend({
 
     addLetter: function (i) {
         let cellSize = cc.spriteFrameCache.getSpriteFrame('cell.png').getOriginalSize();
-        let letter = new cc.Sprite(cc.spriteFrameCache.getSpriteFrame('rus/' + resources.letters_dict[this.word_letters[i]] + '.png'));
+        let letter = new cc.Sprite(cc.spriteFrameCache.getSpriteFrame(resources.letters_dict[this.word_letters[i]]));
         let letter_bg = new cc.Sprite(cc.spriteFrameCache.getSpriteFrame('letter_bg.png'));
         letter.setLocalZOrder(2);
         letter_bg.setLocalZOrder(1);
