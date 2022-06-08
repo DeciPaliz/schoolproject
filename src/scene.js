@@ -54,7 +54,7 @@ var Scene = cc.Scene.extend({
                 x += cellSize.width*this.game.words[0].length + Game.MARGIN_X;
             }
             this.addChild(wordframe);
-            this.wordframes.push(wordframe);
+            this.wordframes[i] = wordframe;
         } 
     },
 
