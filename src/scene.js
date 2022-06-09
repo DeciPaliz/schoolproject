@@ -6,6 +6,7 @@ var Scene = cc.Scene.extend({
         this.game.onFinish = this.onGameFinish.bind(this);
 
         this.lettersize = cc.spriteFrameCache.getSpriteFrame('letter_bg.png').getOriginalSize();
+        this.cellSize = cc.spriteFrameCache.getSpriteFrame('cell.png').getOriginalSize();
 
         this.addBackground();
         this.addBoardBackground();
@@ -28,38 +29,30 @@ var Scene = cc.Scene.extend({
 
     addBoardBackground: function () {
         this.board_bg = new ccui.Scale9Sprite(cc.spriteFrameCache.getSpriteFrame('board_bg.png'), cc.rect(9, 5, 2, 2));
-        this.board_bg.setContentSize(this.width - Game.BOARD_BG_MARGIN_X*2, this.height/2);
-        this.board_bg.setAnchorPoint(0, 1);
-        this.board_bg.setPosition(Game.BOARD_BG_MARGIN_X, this.height - Game.BOARD_BG_MARGIN_X);
+        this.board_bg.setContentSize(this.width - Scene.BOARD_BG_MARGIN_X*2, this.height/2 - Scene.BOARD_BG_MARGIN_Y*2);
+        this.board_bg.setPosition(this.width/2, this.height*3/4);
         this.board_bg.setLocalZOrder(-1);
         this.addChild(this.board_bg);
     },
 
     addWordFrames: function() {
-        let cellSize = cc.spriteFrameCache.getSpriteFrame('cell.png').getOriginalSize();
-        //let x = Game.BOARD_BG_MARGIN_X + Game.MARGIN_X;
-        //let y = this.height - Game.BOARD_BG_MARGIN_Y - Game.MARGIN_Y;
-        //for (let word of this.game.words) {
-        //    let wordframe = new WordFrame(word);
-        //    wordframe.setPosition(x, y);
-        //    this.addChild(wordframe);
-        //    x += cellSize.width*word.length + Game.MARGIN_X;
-        //    if (x > this.width - Game.MARGIN_X*5) {
-        //        y -= Game.MARGIN_Y*2;
-        //        x = Game.MARGIN_X;
-        //    }
-        //}
-        let x = this.width/2 - cellSize.width*this.game.words[0].length - Game.MARGIN_X;
-        let y = (this.board_bg.y - this.board_bg.height/2) + cellSize.height*this.game.words.length/2;
+        let width = this.game.words[0].length*this.cellSize.width + Scene.MARGIN_X + this.game.words[1].length*this.cellSize.width;
+        let x = this.width/2 - width/2;
+        let y = this.height - Scene.BOARD_BG_MARGIN_Y - Scene.OFFSET_Y;
         this.wordframes = new Array(this.game.words.length).fill();
         for (let i = 0; i < this.game.words.length; i++) {
             let wordframe = new WordFrame(this.game.words[i]);
             wordframe.setPosition(x, y);
             if (i % 2 == 1) {
-                x = this.width/2 - cellSize.width*this.game.words[0].length - Game.MARGIN_X;
-                y -= cellSize.height + Game.MARGIN_Y;
+                let width = 0;
+                if (i+1 < this.game.words.length)
+                    width = this.game.words[i].length*this.cellSize.width + Scene.MARGIN_X + this.game.words[i+1].length*this.cellSize.width;
+                else
+                    width = this.game.words[i].length*this.cellSize.width;
+                x = this.width/2 - width/2;
+                y -= this.cellSize.height + Scene.MARGIN_Y;
             } else {
-                x += cellSize.width*this.game.words[0].length + Game.MARGIN_X;
+                x += this.cellSize.width*this.game.words[i].length + Scene.MARGIN_X;
             }
             this.addChild(wordframe);
             this.wordframes[i] = wordframe;
@@ -78,7 +71,7 @@ var Scene = cc.Scene.extend({
 
     addWordPreview: function () {
         this.word_preview = new WordPreview();
-        this.word_preview.setPosition(this.width/2, this.board_bg.y - this.board_bg.height + this.lettersize.height);
+        this.word_preview.setPosition(this.width/2, this.height/2 + this.lettersize.height/2 + Scene.OFFSET_Y);
         this.addChild(this.word_preview);
 
     },
@@ -111,11 +104,13 @@ var Scene = cc.Scene.extend({
 
     onGameFinish: function () {
         console.log("congrats!!!");
+        this.letter_wheel.active = false;
     },
 });
 
-Game.BOARD_BG_MARGIN_X = 50;
-Game.BOARD_BG_MARGIN_Y = 50;
+Scene.BOARD_BG_MARGIN_X = 10;
+Scene.BOARD_BG_MARGIN_Y = 10;
 
-Game.MARGIN_X = 50;
-Game.MARGIN_Y = 50;
+Scene.MARGIN_X = 20;
+Scene.MARGIN_Y = 20;
+Scene.OFFSET_Y = 80;
