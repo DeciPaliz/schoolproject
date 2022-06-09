@@ -36,24 +36,23 @@ var Scene = cc.Scene.extend({
     },
 
     addWordFrames: function() {
-        let width = this.game.words[0].length*this.cellSize.width + Scene.MARGIN_X + this.game.words[1].length*this.cellSize.width;
-        let x = this.width/2 - width/2;
-        let y = this.height - Scene.BOARD_BG_MARGIN_Y - Scene.OFFSET_Y;
+        let x = 0;
+        let y = this.height - Scene.BOARD_BG_MARGIN_Y - Scene.OFFSET_Y + this.cellSize.height + Scene.MARGIN_Y;
         this.wordframes = new Array(this.game.words.length).fill();
         for (let i = 0; i < this.game.words.length; i++) {
-            let wordframe = new WordFrame(this.game.words[i]);
-            wordframe.setPosition(x, y);
-            if (i % 2 == 1) {
+            if (i % 2 == 0) {
                 let width = 0;
                 if (i+1 < this.game.words.length)
                     width = this.game.words[i].length*this.cellSize.width + Scene.MARGIN_X + this.game.words[i+1].length*this.cellSize.width;
                 else
                     width = this.game.words[i].length*this.cellSize.width;
-                x = this.width/2 - width/2;
+                x = this.width/2 - width/2 + this.cellSize.width/2;
                 y -= this.cellSize.height + Scene.MARGIN_Y;
             } else {
-                x += this.cellSize.width*this.game.words[i].length + Scene.MARGIN_X;
+                x += this.cellSize.width*this.game.words[i-1].length + Scene.MARGIN_X;
             }
+            let wordframe = new WordFrame(this.game.words[i]);
+            wordframe.setPosition(x, y);
             this.addChild(wordframe);
             this.wordframes[i] = wordframe;
         } 

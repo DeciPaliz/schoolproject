@@ -51,6 +51,7 @@ var LetterWheel = cc.Node.extend({
         this.selectedLetters = [];
         for (let lb of this.letterbuttons)
             lb.selectionBox.setVisible(false);
+        //TODO: animation
         this.submitButton.setVisible(false);
         this.submitButtonIcon.setVisible(false);
         this.shuffleButton.setVisible(true);
@@ -98,8 +99,10 @@ var LetterWheel = cc.Node.extend({
         }
         let selectedCount = this.selectedLetters.length;
         if (selectedCount > 0) 
+            //TODO: animation
             this.shuffleButton.setVisible(false);
         else
+            //TODO: animation
             this.shuffleButton.setVisible(true);
         if (selectedCount >= 3) {
             //TODO: animation
