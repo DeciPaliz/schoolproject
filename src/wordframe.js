@@ -6,9 +6,9 @@ var WordFrame = cc.Node.extend({
         this.cells = Array(word.length).fill();
         this.letters = Array(word.length).fill();
         this.word_letters = word.split("");
-        let cellSize = cc.spriteFrameCache.getSpriteFrame('cell.png').getOriginalSize();
+        this.cellSize = cc.spriteFrameCache.getSpriteFrame('cell.png').getOriginalSize();
         for (let i = 0; i < this.letters.length; i++) {
-            this.addCell(this.x + i*cellSize.width);
+            this.addCell(this.x + i*this.cellSize.width);
         }
     },
 
@@ -20,18 +20,18 @@ var WordFrame = cc.Node.extend({
     },
 
     addLetter: function (i) {
-        let cellSize = cc.spriteFrameCache.getSpriteFrame('cell.png').getOriginalSize();
         let letter = new cc.Sprite(cc.spriteFrameCache.getSpriteFrame(resources.letters_dict[this.word_letters[i]]));
         let letter_bg = new cc.Sprite(cc.spriteFrameCache.getSpriteFrame('letter_bg.png'));
         letter.setLocalZOrder(2);
         letter_bg.setLocalZOrder(1);
-        letter_bg.setPositionX(letter_bg.x + i*cellSize.width);
-        letter.setPositionX(letter.x + i*cellSize.width);
+        letter_bg.setPositionX(letter_bg.x + i*this.cellSize.width);
+        letter.setPositionX(letter.x + i*this.cellSize.width);
         this.addChild(letter_bg);
         this.addChild(letter);
     },
 
     open: function () {
+        //TODO: opening animation
         for (let i = 0; i < this.opened.length; i++) {
             if (!this.opened[i]) {
                 this.opened[i] = true;

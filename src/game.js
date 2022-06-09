@@ -60,7 +60,7 @@ Game.prototype.generate = function (words_amount, letters_amount, max_len) {
         console.log(this.possible_words);
         console.log(this.letters);
 
-        this.possible_words = [];
+        this.solved = [];
     }.bind(this));
 };
 
@@ -82,24 +82,33 @@ Game.prototype.doesWordConsistOf = function (word, letters) {
     return true;
 };
 
-// данная функция возвращает массив разных букв в словах
-Game.prototype.getWordsDiff = function (word_a, word_b) {
-    let diff = [];
-    word_a = word_a.split('');
-    word_b = word_b.split('');
-    for (let i = 0; i < word_a.length; i++) {
-        let j = word_b.indexOf(word_a[i]);
-        if (j == -1)
-            diff.push(word_a[i]);
-        else
-            delete word_b[j];
-    }
-    for (let i = 0; i < word_b.length; i++) {
-        if (word_b[i] !== undefined)
-            diff.push(word_b[i]);
-    }
-    return diff;
+Game.WORD_FLAG = {
+    NONE: 0,
+    SUCCESS: 1,
+    POSSIBLE: 2,
+    ALREADY_SOLVED: 3
 };
+
+Game.prototype.checkWord = function (letters) {
+    let word = letters.reduce(function (total, l) { return total + l; }, '');
+    if (this.solved.indexOf(word) != -1) {
+        console.log("already solved: " + word);
+        return {flag: Game.ALREADY_SOLVED}
+    }
+    else if (this.words.indexOf(word) != -1) {
+        console.log("success: " + word);
+        this.solved.push(word);
+        return {flag: Game.WORD_FLAG.SUCCESS, index: this.words.indexOf(word)};
+    }
+    else if (this.possible_words.indexOf(word) != -1) {
+        console.log("possible: " + word);
+        return {flag: Game.WORD_FLAG.POSSIBLE, index: this.possible_words.indexOf(word)};
+    }
+    else {
+        console.log("failure: " + word);
+        return {flag: Game.WORD_FLAG.NONE};
+    }
+}
 
 // здесь индекс соответствует количеству букв в слове, массив - границы возможных значений индекса в списке слов
 Game.WORDS_POPULAR_BOUNDS = [

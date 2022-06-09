@@ -4,6 +4,8 @@ var Scene = cc.Scene.extend({
 
         this.game = new Game();
 
+        this.lettersize = cc.spriteFrameCache.getSpriteFrame('letter_bg.png').getOriginalSize();
+
         this.addBackground();
         this.addBoardBackground();
 
@@ -12,6 +14,7 @@ var Scene = cc.Scene.extend({
             this.addLetterWheel();
             this.addWordPreview();
         }.bind(this), 1000);
+
     },
 
     addBackground: function() {
@@ -63,20 +66,20 @@ var Scene = cc.Scene.extend({
     },
 
     addLetterWheel: function () {
-        let lettersize = cc.spriteFrameCache.getSpriteFrame('letter_bg.png').getOriginalSize();
-        this.letter_wheel = new LetterWheel(this.game.letters, this.height/4 - lettersize.width);
+        this.letter_wheel = new LetterWheel(this.game.letters, this.height/4 - this.lettersize.width);
         this.letter_wheel.setPosition(this.width/2, this.height/4);
         this.addChild(this.letter_wheel);
 
         this.letter_wheel.onSelectLetter = this.onLetterWheelSelectLetter.bind(this);
         this.letter_wheel.onDeselectLetter = this.onLetterWheelDeselectLetter.bind(this);
+        this.letter_wheel.onSubmitWord = this.onLetterWheelSubmitWord.bind(this);
     },
 
     addWordPreview: function () {
-        let lettersize = cc.spriteFrameCache.getSpriteFrame('letter_bg.png').getOriginalSize();
         this.word_preview = new WordPreview();
-        this.word_preview.setPosition(this.width/2, this.board_bg.y - this.board_bg.height + lettersize.height);
+        this.word_preview.setPosition(this.width/2, this.board_bg.y - this.board_bg.height + this.lettersize.height);
         this.addChild(this.word_preview);
+
     },
 
     onLetterWheelSelectLetter: function (letter) {
@@ -87,6 +90,23 @@ var Scene = cc.Scene.extend({
         this.word_preview.removeLetter(index);
     },
 
+    onLetterWheelSubmitWord: function (letters) {
+        let result = this.game.checkWord(letters);
+        this.word_preview.removeAllLetters();
+        if (result.flag === Game.WORD_FLAG.NONE) {
+            //TODO: failure animation
+        }
+        else if (result.flag === Game.WORD_FLAG.SUCCESS) {
+            //TODO: success animation
+            this.wordframes[result.index].open();
+        }
+        else if (result.flag === Game.WORD_FLAG.POSSIBLE) {
+            //TODO: possible word animation
+        }
+        else if (result.flag === Game.WORD_FLAG.ALREADY_SOLVED) {
+            //TODO: already solved animation
+        }
+    },
 });
 
 Game.BOARD_BG_MARGIN_X = 50;
