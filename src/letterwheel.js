@@ -5,6 +5,7 @@ var LetterWheel = cc.Node.extend({
         this.onSelectLetter = function (letter) {};
         this.onDeselectLetter = function (index) {};
         this.onSubmitWord = function (letters) {};
+        this.active = true;
 
         this.letters = letters;
         this.radius = radius;
@@ -35,9 +36,14 @@ var LetterWheel = cc.Node.extend({
 
         this.shuffleButton = new ccui.Button('#shuffle.png', '#shuffle_on.png', null, ccui.Widget.PLIST_TEXTURE);
         this.addChild(this.shuffleButton);
+
+        this.shuffleButton.addClickEventListener(function () {
+            this.shuffle();
+        }.bind(this));
     },
 
     submitWord: function () {
+        if (!this.active) return;
         let letters = Array(this.selectedLetters.length).fill().map(function (_, i) {
             return this.letters[this.selectedLetters[i]];
         }.bind(this));
@@ -45,6 +51,9 @@ var LetterWheel = cc.Node.extend({
         this.selectedLetters = [];
         for (let lb of this.letterbuttons)
             lb.selectionBox.setVisible(false);
+        this.submitButton.setVisible(false);
+        this.submitButtonIcon.setVisible(false);
+        this.shuffleButton.setVisible(true);
     },
 
     setCirclePosition: function () {
@@ -55,7 +64,29 @@ var LetterWheel = cc.Node.extend({
         }
     },
 
+    shuffle: function () {
+        if (!this.active) return;
+        this.active = false;
+        let new_pos_arr = new Array(this.letterbuttons.length).fill(undefined);
+        for (let i = 0; i < this.letterbuttons.length; i++) {
+            let j = Math.floor(Math.random() * new_pos_arr.length);
+            while (new_pos_arr[j] !== undefined) j = Math.floor(Math.random() * new_pos_arr.length);
+            new_pos_arr[j] = i;
+        }
+        let angle = 2*Math.PI/this.letters.length;
+        let new_arr = new Array(this.letterbuttons.length).fill();
+        for (let i = 0; i < this.letterbuttons.length; i++) {
+            let j = new_pos_arr[i];
+            let lb = this.letterbuttons[i];
+            let new_pos = {x: Math.floor(this.radius*(Math.sin(j*angle))), y: Math.floor(this.radius*(Math.cos(j*angle)))};
+            lb.runAction(new cc.MoveTo(LetterWheel.MOVE_DURATION, new_pos.x, new_pos.y));
+            new_arr[j] = lb;
+        }
+        setTimeout(function () { this.active = true; }.bind(this), LetterWheel.MOVE_DURATION*1000);
+    },
+
     onLetterButtonClick: function (index) {
+        if (!this.active) return;
         this.letterbuttons[index].selectionBox.setVisible(!this.letterbuttons[index].selectionBox.isVisible());
         if (this.letterbuttons[index].selectionBox.isVisible()) {
             this.onSelectLetter(this.letters[index]);
@@ -81,3 +112,5 @@ var LetterWheel = cc.Node.extend({
         }
     },
 });
+
+LetterWheel.MOVE_DURATION = 0.2;

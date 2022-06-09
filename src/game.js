@@ -1,5 +1,7 @@
 var Game = function (difficulty) {
     this.generate(4, 5, 4);
+
+    this.onFinish = function () {};
 };
 
 Game.prototype.generate = function (words_amount, letters_amount, max_len) {
@@ -98,6 +100,12 @@ Game.prototype.checkWord = function (letters) {
     else if (this.words.indexOf(word) != -1) {
         console.log("success: " + word);
         this.solved.push(word);
+        if (this.words.reduce(function (flag, val) { 
+            if (!flag) return false;
+            if (this.solved.indexOf(val) === -1) return false;
+            return true;
+        }.bind(this), true))
+            this.onFinish();
         return {flag: Game.WORD_FLAG.SUCCESS, index: this.words.indexOf(word)};
     }
     else if (this.possible_words.indexOf(word) != -1) {

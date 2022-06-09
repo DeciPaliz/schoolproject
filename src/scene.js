@@ -3,6 +3,7 @@ var Scene = cc.Scene.extend({
         this._super();
 
         this.game = new Game();
+        this.game.onFinish = this.onGameFinish.bind(this);
 
         this.lettersize = cc.spriteFrameCache.getSpriteFrame('letter_bg.png').getOriginalSize();
 
@@ -106,6 +107,10 @@ var Scene = cc.Scene.extend({
         else if (result.flag === Game.WORD_FLAG.ALREADY_SOLVED) {
             //TODO: already solved animation
         }
+    },
+
+    onGameFinish: function () {
+        console.log("congrats!!!");
     },
 });
 
