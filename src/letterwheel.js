@@ -16,17 +16,20 @@ var LetterWheel = cc.Node.extend({
         for (let i = 0; i < this.letters.length; i++) {
             this.letterbuttons[i] = new LetterButton(this.letters[i]);
             this.letterbuttons[i].onClick = this.onLetterButtonClick.bind(this, i);
+            this.letterbuttons[i].setVisible(false);
             this.addChild(this.letterbuttons[i]);
+            setTimeout(function () { this.letterbuttons[i].setVisible(true); }.bind(this), i*LetterWheel.APPEARING_DURATION);
         }
         this.setCirclePosition();
 
-        this.submitButton = new ccui.Button('#button_blue.png', '#button_blue_on.png', null, ccui.Widget.PLIST_TEXTURE);
+        this.submitButton = new ccui.Button('#button_blue.png', '#button_blue_on.png', '#button_blue.png', ccui.Widget.PLIST_TEXTURE);
         this.submitButtonIcon = new cc.Sprite(cc.spriteFrameCache.getSpriteFrame('submit_icon.png'));
         this.submitButton.setScale9Enabled(true);
         this.submitButton.setCapInsets(cc.rect(this.submitButton.width/2 - 1, this.submitButton.height/2 - 1, 2, 2));
         this.submitButton.setContentSize(this.submitButtonIcon.width + 30, this.submitButtonIcon.height + 20);
-        this.submitButton.setVisible(false);
-        this.submitButtonIcon.setVisible(false);
+        this.submitButton.setEnabled(false);
+        this.submitButton.setOpacity(0);
+        this.submitButtonIcon.setOpacity(0);
         this.addChild(this.submitButton);
         this.addChild(this.submitButtonIcon);
 
@@ -34,8 +37,10 @@ var LetterWheel = cc.Node.extend({
             this.submitWord();
         }.bind(this));
 
-        this.shuffleButton = new ccui.Button('#shuffle.png', '#shuffle_on.png', null, ccui.Widget.PLIST_TEXTURE);
+        this.shuffleButton = new ccui.Button('#shuffle.png', '#shuffle_on.png', '#shuffle.png', ccui.Widget.PLIST_TEXTURE);
+        this.shuffleButton.setVisible(false);
         this.addChild(this.shuffleButton);
+        setTimeout(function () { this.shuffleButton.setVisible(true); }.bind(this), (this.letterbuttons.length+1)*LetterWheel.APPEARING_DURATION);
 
         this.shuffleButton.addClickEventListener(function () {
             this.shuffle();
@@ -54,9 +59,10 @@ var LetterWheel = cc.Node.extend({
         for (let lb of this.letterbuttons)
             lb.selectionBox.setVisible(false);
         //TODO: animation
-        this.submitButton.setVisible(false);
-        this.submitButtonIcon.setVisible(false);
-        this.shuffleButton.setVisible(true);
+        this.submitButton.runAction(new cc.FadeOut(LetterWheel.FADE_DURATION));
+        this.submitButtonIcon.runAction(new cc.FadeOut(LetterWheel.FADE_DURATION));
+        this.submitButton.setEnabled(false);
+        setTimeout(function () { this.shuffleButton.runAction(new cc.FadeIn(LetterWheel.FADE_DURATION)); this.shuffleButton.setEnabled(true); }.bind(this), LetterWheel.FADE_DURATION*1000);
     },
 
     setCirclePosition: function () {
@@ -102,20 +108,26 @@ var LetterWheel = cc.Node.extend({
             this.letterbuttons[index].runAction(new cc.ScaleTo(LetterWheel.BUTTON_SCALE_DURATION, 1));
         }
         let selectedCount = this.selectedLetters.length;
-        if (selectedCount > 0) 
+        if (selectedCount > 0) {
             //TODO: animation
-            this.shuffleButton.setVisible(false);
-        else
-            //TODO: animation
-            this.shuffleButton.setVisible(true);
-        if (selectedCount >= 3) {
-            //TODO: animation
-            this.submitButton.setVisible(true);
-            this.submitButtonIcon.setVisible(true);
+            this.shuffleButton.runAction(new cc.FadeOut(LetterWheel.FADE_DURATION));
+            this.shuffleButton.setEnabled(false);
         }
         else {
-            this.submitButton.setVisible(false);
-            this.submitButtonIcon.setVisible(false);
+            //TODO: animation
+            this.shuffleButton.runAction(new cc.FadeIn(LetterWheel.FADE_DURATION));
+            this.shuffleButton.setEnabled(true);
+        }
+        if (selectedCount >= 3) {
+            //TODO: animation
+            this.submitButton.runAction(new cc.FadeIn(LetterWheel.FADE_DURATION));
+            this.submitButtonIcon.runAction(new cc.FadeIn(LetterWheel.FADE_DURATION));
+            this.submitButton.setEnabled(true);
+        }
+        else {
+            this.submitButton.runAction(new cc.FadeOut(LetterWheel.FADE_DURATION));
+            this.submitButtonIcon.runAction(new cc.FadeOut(LetterWheel.FADE_DURATION));
+            this.submitButton.setEnabled(false);
         }
     },
 });
@@ -123,3 +135,6 @@ var LetterWheel = cc.Node.extend({
 LetterWheel.MOVE_DURATION = 0.2;
 LetterWheel.BUTTON_SCALE = 1.1;
 LetterWheel.BUTTON_SCALE_DURATION = 0.04;
+LetterWheel.APPEARING_DURATION = 100;
+
+LetterWheel.FADE_DURATION = 0.1;

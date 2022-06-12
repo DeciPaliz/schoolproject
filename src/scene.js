@@ -37,7 +37,9 @@ var Scene = cc.Scene.extend({
         this.board_bg.setContentSize(this.width - Scene.BOARD_BG_MARGIN_X*2, this.height/2 - Scene.BOARD_BG_MARGIN_Y*2);
         this.board_bg.setPosition(this.width/2, this.height*3/4);
         this.board_bg.setLocalZOrder(-1);
+        this.board_bg.setScaleX(0);
         this.addChild(this.board_bg);
+        this.board_bg.runAction(new cc.ScaleTo(Scene.BOARD_BG_APPEARING_DURATION, 1, 1));
     },
 
     addWordFrames: function() {
@@ -127,3 +129,5 @@ Scene.BOARD_BG_MARGIN_Y = 10;
 Scene.MARGIN_X = 20;
 Scene.MARGIN_Y = 20;
 Scene.OFFSET_Y = 80;
+
+Scene.BOARD_BG_APPEARING_DURATION = 0.5;

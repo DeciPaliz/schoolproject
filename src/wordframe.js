@@ -15,8 +15,10 @@ var WordFrame = cc.Node.extend({
     addCell: function (x) {
         let cell = new cc.Sprite(cc.spriteFrameCache.getSpriteFrame('cell.png'));
         cell.setPositionX(x);
+        cell.setScale(0);
         this.addChild(cell);
         this.cells.push(cell);
+        cell.runAction(new cc.ScaleTo(WordFrame.APPEARING_DURATION, 1));
     },
 
     addLetter: function (i) {
@@ -41,3 +43,5 @@ var WordFrame = cc.Node.extend({
         }
     }
 });
+
+WordFrame.APPEARING_DURATION = 0.5;
