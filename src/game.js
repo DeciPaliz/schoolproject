@@ -2,6 +2,12 @@ var Game = function (difficulty) {
     this.generate(4, 5, 4);
 
     this.onFinish = function () {};
+
+    this.onSolve = function (word_index) {};
+    this.onHint = function (hint) {};
+    this.onAlreadySolved = function (word_index, possible_word_index) {};
+    this.onPossible = function (possible_word_index) {};
+    this.onFailure = function () {};
 };
 
 Game.prototype.generate = function (words_amount, letters_amount, max_len) {
@@ -63,6 +69,7 @@ Game.prototype.generate = function (words_amount, letters_amount, max_len) {
         console.log(this.letters);
 
         this.solved = [];
+        this.available_hints = new Array(this.words.length).fill().map(function (_, i) { return {word: i, letters: new Array(this.words[i].length).fill().map((_, i) => i)} }.bind(this));
     }.bind(this));
 };
 
@@ -72,6 +79,22 @@ Game.prototype.getRandomLetter = function () {
         if (i < Game.LETTERS_PROBABILITIES[j]) return Game.LETTERS[j];
     }
 }
+
+Game.prototype.hint = function () {
+    let random_word = this.available_hints[Math.floor(Math.random() * this.available_hints.length)];
+    let random_letter = this.available_hints[random_word].letters[Math.floor(Math.random() * this.available_hints[random_word].letters.length)];
+    let hint = {word: this.available_hints[random_word].word, letter: this.available_hints[random_word].letters[random_letter]};
+    this.onHint(hint);
+    this.available_hints = this.available_hints[random_word].letters.filter(function (_, i) { return i != random_letter; });
+    
+    if (this.available_hints[random_word].letters.length == 0) {
+        this.solved.push(word);
+        this.onSolve(hint.word);
+        this.available_hints = this.available_hints.filter(function (_, i) { return i != random_word; });
+        if (this.available_hints.length === 0)
+            this.onFinish();
+    }
+};
 
 // данная функция возвращает true если данное слово можно составить из этих букв
 Game.prototype.doesWordConsistOf = function (word, letters) {
@@ -84,37 +107,31 @@ Game.prototype.doesWordConsistOf = function (word, letters) {
     return true;
 };
 
-Game.WORD_FLAG = {
-    NONE: 0,
-    SUCCESS: 1,
-    POSSIBLE: 2,
-    ALREADY_SOLVED: 3
-};
-
 Game.prototype.checkWord = function (letters) {
     let word = letters.reduce(function (total, l) { return total + l; }, '');
     if (this.solved.indexOf(word) != -1) {
         console.log("already solved: " + word);
-        return {flag: Game.ALREADY_SOLVED}
+        this.onAlreadySolved(this.words.indexOf(word), this.possible_words.indexOf(word));
     }
     else if (this.words.indexOf(word) != -1) {
         console.log("success: " + word);
         this.solved.push(word);
+        this.available_hints = this.available_hints.filter((_, i) => i != this.words.indexOf(word));
         if (this.words.reduce(function (flag, val) { 
             if (!flag) return false;
             if (this.solved.indexOf(val) === -1) return false;
             return true;
         }.bind(this), true))
             this.onFinish();
-        return {flag: Game.WORD_FLAG.SUCCESS, index: this.words.indexOf(word)};
+        this.onSolve(this.words.indexOf(word));
     }
     else if (this.possible_words.indexOf(word) != -1) {
         console.log("possible: " + word);
-        return {flag: Game.WORD_FLAG.POSSIBLE, index: this.possible_words.indexOf(word)};
+        this.onPossible(this.possible_words.indexOf(word));
     }
     else {
         console.log("failure: " + word);
-        return {flag: Game.WORD_FLAG.NONE};
+        this.onFailure();
     }
 }
 

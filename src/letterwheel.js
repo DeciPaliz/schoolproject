@@ -48,6 +48,8 @@ var LetterWheel = cc.Node.extend({
             return this.letters[this.selectedLetters[i]];
         }.bind(this));
         this.onSubmitWord(letters);
+        for (let sl of this.selectedLetters)
+            this.letterbuttons[sl].runAction(new cc.ScaleTo(LetterWheel.BUTTON_SCALE_DURATION, 1));
         this.selectedLetters = [];
         for (let lb of this.letterbuttons)
             lb.selectionBox.setVisible(false);
@@ -92,10 +94,12 @@ var LetterWheel = cc.Node.extend({
         if (this.letterbuttons[index].selectionBox.isVisible()) {
             this.onSelectLetter(this.letters[index]);
             this.selectedLetters.push(index);
+            this.letterbuttons[index].runAction(new cc.ScaleTo(LetterWheel.BUTTON_SCALE_DURATION, LetterWheel.BUTTON_SCALE));
         }
         else {
             this.onDeselectLetter(this.selectedLetters.indexOf(index));
             this.selectedLetters = this.selectedLetters.filter(function (val) { return val != index; });
+            this.letterbuttons[index].runAction(new cc.ScaleTo(LetterWheel.BUTTON_SCALE_DURATION, 1));
         }
         let selectedCount = this.selectedLetters.length;
         if (selectedCount > 0) 
@@ -117,3 +121,5 @@ var LetterWheel = cc.Node.extend({
 });
 
 LetterWheel.MOVE_DURATION = 0.2;
+LetterWheel.BUTTON_SCALE = 1.1;
+LetterWheel.BUTTON_SCALE_DURATION = 0.04;

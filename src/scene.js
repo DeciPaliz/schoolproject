@@ -4,6 +4,11 @@ var Scene = cc.Scene.extend({
 
         this.game = new Game();
         this.game.onFinish = this.onGameFinish.bind(this);
+        this.game.onHint = this.onGameHint.bind(this);
+        this.game.onSolve = this.onGameSolve.bind(this);
+        this.game.onAlreadySolved = this.onGameAlreadySolved.bind(this);
+        this.game.onPossible = this.onGamePossible.bind(this);
+        this.game.onFailure = this.onGameFailure.bind(this);
 
         this.lettersize = cc.spriteFrameCache.getSpriteFrame('letter_bg.png').getOriginalSize();
         this.cellSize = cc.spriteFrameCache.getSpriteFrame('cell.png').getOriginalSize();
@@ -84,26 +89,35 @@ var Scene = cc.Scene.extend({
     },
 
     onLetterWheelSubmitWord: function (letters) {
-        let result = this.game.checkWord(letters);
+        this.game.checkWord(letters);
         this.word_preview.removeAllLetters();
-        if (result.flag === Game.WORD_FLAG.NONE) {
-            //TODO: failure animation
-        }
-        else if (result.flag === Game.WORD_FLAG.SUCCESS) {
-            //TODO: success animation
-            this.wordframes[result.index].open();
-        }
-        else if (result.flag === Game.WORD_FLAG.POSSIBLE) {
-            //TODO: possible word animation
-        }
-        else if (result.flag === Game.WORD_FLAG.ALREADY_SOLVED) {
-            //TODO: already solved animation
-        }
     },
 
     onGameFinish: function () {
+        //TODO: game finish animation
         console.log("congrats!!!");
         this.letter_wheel.active = false;
+    },
+
+    onGameSolve: function (word_index) {
+        //TODO: animation
+        this.wordframes[word_index].open();
+    },
+
+    onGameHint: function (hint) {
+        
+    },
+
+    onGameAlreadySolved: function (word_index, possible_word_index) {
+        //TODO: animation
+    },
+
+    onGamePossible: function (possible_word_index) {
+        //TODO: animation
+    },
+
+    onGameFailure: function () {
+        //TODO: animation
     },
 });
 
