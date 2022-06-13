@@ -2,9 +2,6 @@ var resources = {
     game_plist: "respacked/game.plist",
 
     background: "res/backgrounds/background.jpg",
-    level_bg1: "res/backgrounds/level_bg.jpg",
-    level_bg2: "res/backgrounds/level_bg2.jpg",
-    level_bg3: "res/backgrounds/level_bg3.jpg",
 
     pattern_bg: "res/backgrounds/pattern_bg_game.png",
     pattern_bg_hard: "res/backgrounds/pattern_bg_game_hard.png",
@@ -12,7 +9,9 @@ var resources = {
     words_full: "res/dictionary/ru_full.txt",
     words_popular: "res/dictionary/ru_popular.txt",
 
-    letters_dict: {
+};
+
+letters_dict = {
         'а': 'rus/a.png',
         'б': 'rus/b.png',
         'в': 'rus/v.png',
@@ -46,5 +45,4 @@ var resources = {
         'э': 'rus/eh.png',
         'ю': 'rus/yu.png',
         'я': 'rus/ya.png'
-    },
 }

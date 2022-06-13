@@ -5,7 +5,7 @@ var LetterButton = cc.Node.extend({
         this.onClick = function () {};
         
         this.letter = letter;
-        this.letter_sprite = new cc.Sprite(cc.spriteFrameCache.getSpriteFrame(resources.letters_dict[this.letter]));
+        this.letter_sprite = new cc.Sprite(cc.spriteFrameCache.getSpriteFrame(letters_dict[this.letter]));
 //        this.letter_bg = new ccui.Button(cc.spriteFrameCache.getSpriteFrame('letter_bg.png'));
         this.letter_bg = new ccui.Button('#letter_bg.png', null, null, ccui.Widget.PLIST_TEXTURE);
         this.letter_sprite.setLocalZOrder(2);

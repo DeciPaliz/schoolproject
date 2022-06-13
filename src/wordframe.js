@@ -23,7 +23,7 @@ var WordFrame = cc.Node.extend({
 
     addLetter: function (i) {
         //TODO: animation
-        let letter = new cc.Sprite(cc.spriteFrameCache.getSpriteFrame(resources.letters_dict[this.word_letters[i]]));
+        let letter = new cc.Sprite(cc.spriteFrameCache.getSpriteFrame(letters_dict[this.word_letters[i]]));
         let letter_bg = new cc.Sprite(cc.spriteFrameCache.getSpriteFrame('letter_bg.png'));
         letter.setLocalZOrder(2);
         letter_bg.setLocalZOrder(1);
