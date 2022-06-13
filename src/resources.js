@@ -1,5 +1,7 @@
 var resources = {
     game_plist: "respacked/game.plist",
+    game_atlas: "respacked/game.atlas",
+    victory_json: "res/victory/victory.json",
 
     background: "res/backgrounds/background.jpg",
 

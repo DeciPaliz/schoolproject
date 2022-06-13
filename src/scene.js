@@ -96,8 +96,11 @@ var Scene = cc.Scene.extend({
     },
 
     onGameFinish: function () {
-        //TODO: game finish animation
-        console.log("congrats!!!");
+        this.finishAnimation = sp.SkeletonAnimation.create(resources.victory_json, resources.game_atlas);
+        this.finishAnimation.setAnimation(0, "open", false);
+        this.finishAnimation.addAnimation(0, "idle", true);
+        this.finishAnimation.setPosition(this.width/2, this.height/2);
+        this.addChild(this.finishAnimation);
         this.letter_wheel.active = false;
     },
 
