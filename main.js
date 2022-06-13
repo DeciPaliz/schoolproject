@@ -7,8 +7,10 @@ cc.game.onStart = function () {
 
     cc.LoaderScene.preload(Object.values(resources), function () {
         cc.spriteFrameCache.addSpriteFrames(resources.game_plist);
-
-        cc.director.runScene(new Scene());
+        let game = new Game();
+        game.onFinishGenerating = function () {
+            cc.director.runScene(new Scene(game));
+        }.bind(this);
     }, this);
 };
 

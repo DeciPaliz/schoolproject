@@ -1,8 +1,8 @@
 var Scene = cc.Scene.extend({
-    ctor: function () {
+    ctor: function (game) {
         this._super();
 
-        this.game = new Game();
+        this.game = game;
         this.game.onFinish = this.onGameFinish.bind(this);
         this.game.onHint = this.onGameHint.bind(this);
         this.game.onSolve = this.onGameSolve.bind(this);

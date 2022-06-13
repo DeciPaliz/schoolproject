@@ -1,4 +1,6 @@
 var Game = function (difficulty) {
+    this.onFinishGenerating = function () {};
+    
     this.generate(4, 5, 4);
 
     this.onFinish = function () {};
@@ -70,6 +72,8 @@ Game.prototype.generate = function (words_amount, letters_amount, max_len) {
 
         this.solved = [];
         this.available_hints = new Array(this.words.length).fill().map(function (_, i) { return {word: i, letters: new Array(this.words[i].length).fill().map((_, i) => i)} }.bind(this));
+
+        this.onFinishGenerating();
     }.bind(this));
 };
 
