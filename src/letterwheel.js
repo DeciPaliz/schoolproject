@@ -1,17 +1,25 @@
 var LetterWheel = cc.Node.extend({
-    ctor: function (letters, radius) {
+    ctor: function (game, radius) {
         this._super();
 
         this.onSelectLetter = function (letter) {};
         this.onDeselectLetter = function (index) {};
         this.onSubmitWord = function (letters) {};
+
         this.active = true;
-
-        this.letters = letters;
+        this.game = game;
+        this.letters = game.letters;
         this.radius = radius;
-
         this.selectedLetters = [];
 
+        this.addLetterButtons();
+        this.setCirclePosition();
+
+        this.addSubmitButton();
+        this.addShuffleButton();
+    },
+
+    addLetterButtons: function () {
         this.letterbuttons = new Array(this.letters.length).fill();
         for (let i = 0; i < this.letters.length; i++) {
             this.letterbuttons[i] = new LetterButton(this.letters[i]);
@@ -20,8 +28,9 @@ var LetterWheel = cc.Node.extend({
             this.addChild(this.letterbuttons[i]);
             setTimeout(function () { this.letterbuttons[i].setVisible(true); }.bind(this), i*LetterWheel.APPEARING_DURATION);
         }
-        this.setCirclePosition();
+    },
 
+    addSubmitButton: function () {
         this.submitButton = new ccui.Button('#button_blue.png', '#button_blue_on.png', '#button_blue.png', ccui.Widget.PLIST_TEXTURE);
         this.submitButtonIcon = new cc.Sprite(cc.spriteFrameCache.getSpriteFrame('submit_icon.png'));
         this.submitButton.setScale9Enabled(true);
@@ -36,7 +45,9 @@ var LetterWheel = cc.Node.extend({
         this.submitButton.addClickEventListener(function () {
             this.submitWord();
         }.bind(this));
+    },
 
+    addShuffleButton: function () {
         this.shuffleButton = new ccui.Button('#shuffle.png', '#shuffle_on.png', '#shuffle.png', ccui.Widget.PLIST_TEXTURE);
         this.shuffleButton.setVisible(false);
         this.addChild(this.shuffleButton);
@@ -48,7 +59,7 @@ var LetterWheel = cc.Node.extend({
     },
 
     submitWord: function () {
-        if (!this.active) return;
+        if (!this.active || !this.game.running) return;
         let letters = Array(this.selectedLetters.length).fill().map(function (_, i) {
             return this.letters[this.selectedLetters[i]];
         }.bind(this));
@@ -74,7 +85,7 @@ var LetterWheel = cc.Node.extend({
     },
 
     shuffle: function () {
-        if (!this.active) return;
+        if (!this.active || !this.game.running) return;
         this.active = false;
         let new_pos_arr = new Array(this.letterbuttons.length).fill(undefined);
         for (let i = 0; i < this.letterbuttons.length; i++) {
@@ -95,7 +106,7 @@ var LetterWheel = cc.Node.extend({
     },
 
     onLetterButtonClick: function (index) {
-        if (!this.active) return;
+        if (!this.active || !this.game.running) return;
         this.letterbuttons[index].selectionBox.setVisible(!this.letterbuttons[index].selectionBox.isVisible());
         if (this.letterbuttons[index].selectionBox.isVisible()) {
             this.onSelectLetter(this.letters[index]);

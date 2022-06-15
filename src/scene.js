@@ -59,6 +59,7 @@ var Scene = cc.Scene.extend({
                 x += this.cellSize.width*this.game.words[i-1].length + Scene.MARGIN_X;
             }
             let wordframe = new WordFrame(this.game.words[i]);
+            wordframe.onFinishOpening = this.onWordFrameFinishOpening.bind(this);
             wordframe.setPosition(x, y);
             this.addChild(wordframe);
             this.wordframes[i] = wordframe;
@@ -66,7 +67,7 @@ var Scene = cc.Scene.extend({
     },
 
     addLetterWheel: function () {
-        this.letter_wheel = new LetterWheel(this.game.letters, this.height/4 - this.lettersize.width);
+        this.letter_wheel = new LetterWheel(this.game, this.height/4 - this.lettersize.width);
         this.letter_wheel.setPosition(this.width/2, this.height/4);
         this.addChild(this.letter_wheel);
 
@@ -79,7 +80,8 @@ var Scene = cc.Scene.extend({
         this.word_preview = new WordPreview();
         this.word_preview.setPosition(this.width/2, this.height/2 + this.lettersize.height/2 + Scene.OFFSET_Y);
         this.addChild(this.word_preview);
-
+        
+        this.word_preview.onFinishDisplaying = this.onWordPreviewFinishDisplaying.bind(this);
     },
 
     onLetterWheelSelectLetter: function (letter) {
@@ -92,21 +94,33 @@ var Scene = cc.Scene.extend({
 
     onLetterWheelSubmitWord: function (letters) {
         this.game.checkWord(letters);
-        this.word_preview.removeAllLetters();
+    },
+
+    onWordPreviewFinishDisplaying: function (word_index) {
+        if (word_index !== -1) {
+            this.wordframes[word_index].open();
+        }
+        this.letter_wheel.active = true;
+    },
+
+    onWordFrameFinishOpening: function () {
+        this.letter_wheel.active = true;
     },
 
     onGameFinish: function () {
-        this.finishAnimation = sp.SkeletonAnimation.create(resources.victory_json, resources.game_atlas);
-        this.finishAnimation.setAnimation(0, "open", false);
-        this.finishAnimation.addAnimation(0, "idle", true);
-        this.finishAnimation.setPosition(this.width/2, this.height/2);
-        this.addChild(this.finishAnimation);
-        this.letter_wheel.active = false;
+        setTimeout(function () {
+            this.finishAnimation = sp.SkeletonAnimation.create(resources.victory_json, resources.game_atlas);
+            this.finishAnimation.setAnimation(0, "open", false);
+            this.finishAnimation.addAnimation(0, "idle", true);
+            this.finishAnimation.setPosition(this.width/2, this.height/2);
+            this.addChild(this.finishAnimation);
+        }.bind(this), Scene.FINISH_ANIMATION_DELAY*1000);
     },
 
     onGameSolve: function (word_index) {
         //TODO: animation
-        this.wordframes[word_index].open();
+        this.letter_wheel.active = false;
+        this.word_preview.display("success", word_index);
     },
 
     onGameHint: function (hint) {
@@ -114,15 +128,18 @@ var Scene = cc.Scene.extend({
     },
 
     onGameAlreadySolved: function (word_index, possible_word_index) {
-        //TODO: animation
+        this.letter_wheel.active = false;
+        this.word_preview.display("failure");
     },
 
     onGamePossible: function (possible_word_index) {
-        //TODO: animation
+        this.letter_wheel.active = false;
+        this.word_preview.display("possible", -1);
     },
 
     onGameFailure: function () {
-        //TODO: animation
+        this.letter_wheel.active = false;
+        this.word_preview.display("failure", -1);
     },
 });
 
@@ -134,3 +151,5 @@ Scene.MARGIN_Y = 20;
 Scene.OFFSET_Y = 80;
 
 Scene.BOARD_BG_APPEARING_DURATION = 0.5;
+
+Scene.FINISH_ANIMATION_DELAY = 1;

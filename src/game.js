@@ -1,6 +1,8 @@
 var Game = function (difficulty) {
     this.onFinishGenerating = function () {};
     
+    this.running = true;
+
     this.generate(4, 5, 4);
 
     this.onFinish = function () {};
@@ -95,8 +97,10 @@ Game.prototype.hint = function () {
         this.solved.push(word);
         this.onSolve(hint.word);
         this.available_hints = this.available_hints.filter(function (_, i) { return i != random_word; });
-        if (this.available_hints.length === 0)
+        if (this.available_hints.length === 0) {
+            this.running = false;
             this.onFinish();
+        }
     }
 };
 
@@ -125,8 +129,10 @@ Game.prototype.checkWord = function (letters) {
             if (!flag) return false;
             if (this.solved.indexOf(val) === -1) return false;
             return true;
-        }.bind(this), true))
+        }.bind(this), true)) {
+            this.running = false;
             this.onFinish();
+        }
         this.onSolve(this.words.indexOf(word));
     }
     else if (this.possible_words.indexOf(word) != -1) {

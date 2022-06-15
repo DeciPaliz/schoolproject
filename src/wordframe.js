@@ -2,6 +2,8 @@ var WordFrame = cc.Node.extend({
     ctor: function (word) {
         this._super();
 
+        this.onFinishOpening = function () {};
+
         this.opened = Array(word.length).fill().map(function () { return false; });
         this.cells = Array(word.length).fill();
         this.letters = Array(word.length).fill();
@@ -41,6 +43,8 @@ var WordFrame = cc.Node.extend({
                 this.addLetter(i);
             }
         }
+
+        this.onFinishOpening();
     }
 });
 
