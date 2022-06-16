@@ -112,11 +112,13 @@ var LetterWheel = cc.Node.extend({
             this.onSelectLetter(this.letters[index]);
             this.selectedLetters.push(index);
             this.letterbuttons[index].runAction(new cc.ScaleTo(LetterWheel.BUTTON_SCALE_DURATION, LetterWheel.BUTTON_SCALE));
+            cc.audioEngine.playEffect(resources.button_click, false);
         }
         else {
             this.onDeselectLetter(this.selectedLetters.indexOf(index));
             this.selectedLetters = this.selectedLetters.filter(function (val) { return val != index; });
             this.letterbuttons[index].runAction(new cc.ScaleTo(LetterWheel.BUTTON_SCALE_DURATION, 1));
+            cc.audioEngine.playEffect(resources.button_click, false);
         }
         let selectedCount = this.selectedLetters.length;
         if (selectedCount > 0) {

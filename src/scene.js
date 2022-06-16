@@ -16,6 +16,9 @@ var Scene = cc.Scene.extend({
         this.addBackground();
         this.addBoardBackground();
 
+        cc.audioEngine.playMusic(resources.game_music, true);
+        cc.audioEngine.setMusicVolume(0.5);
+
         setTimeout(function () {
             this.addWordFrames();
             this.addLetterWheel();
@@ -114,6 +117,8 @@ var Scene = cc.Scene.extend({
             this.finishAnimation.addAnimation(0, "idle", true);
             this.finishAnimation.setPosition(this.width/2, this.height/2);
             this.addChild(this.finishAnimation);
+            cc.audioEngine.stopMusic();
+            cc.audioEngine.playEffect(resources.win);
         }.bind(this), Scene.FINISH_ANIMATION_DELAY*1000);
     },
 

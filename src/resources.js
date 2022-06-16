@@ -11,6 +11,13 @@ var resources = {
     words_full: "res/dictionary/ru_full.txt",
     words_popular: "res/dictionary/ru_popular.txt",
 
+    game_music: "res/sfx/game/music.mp3",
+    button_click: "res/sfx/game/letter.mp3",
+    failure: "res/sfx/game/wrong.mp3",
+    possible: "res/sfx/game/extra.mp3",
+    success: "res/sfx/game/letters.mp3",
+    already_found: "res/sfx/game/alreadyfound.mp3",
+    win: "res/sfx/game/win.mp3"
 };
 
 letters_dict = {

@@ -66,6 +66,7 @@ var WordPreview = cc.Node.extend({
                     new cc.DelayTime(2*WordPreview.MARKER_FADE_DURATION - WordPreview.LETTER_FADE_DELAY*this.letter_buttons.length),
                     new cc.FadeOut(WordPreview.MARKER_FADE_DURATION)
                 ));
+                cc.audioEngine.playEffect(resources.success, false);
                 break;
             case "possible":
                 this.possible_marker.setPositionX(x);
@@ -74,6 +75,7 @@ var WordPreview = cc.Node.extend({
                     new cc.DelayTime(2*WordPreview.MARKER_FADE_DURATION - WordPreview.LETTER_FADE_DELAY*this.letter_buttons.length),
                     new cc.FadeOut(WordPreview.MARKER_FADE_DURATION)
                 ));
+                cc.audioEngine.playEffect(resources.possible, false);
                 break;
             case "failure":
                 this.failure_marker.setPositionX(x);
@@ -82,6 +84,7 @@ var WordPreview = cc.Node.extend({
                     new cc.DelayTime(WordPreview.LETTER_FADE_DELAY*this.letter_buttons.length),
                     new cc.FadeOut(WordPreview.MARKER_FADE_DURATION)
                 ));
+                cc.audioEngine.playEffect(resources.failure, false);
                 break;
         }
         if (type === "success" || type === "possible") {
